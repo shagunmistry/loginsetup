@@ -55,8 +55,20 @@ class LoginCard extends Component {
                             });
                         }
                     }).catch((err) => {
-
-                        document.getElementById('message').innerText = err.message;
+                        if (err.code === "auth/user-not-found") {
+                            // Email not found so ask them to register
+                            firebaseApp.auth().createUserWithEmailAndPassword(emailField, passField).then((user) => {
+                                if (user) {
+                                    referThis.setState({
+                                        signedIn: true
+                                    });
+                                }
+                            }).catch((newErr) => {
+                                document.getElementById('message').innerText = err.message;
+                            });
+                        } else {
+                            document.getElementById('message').innerText = err.message;
+                        }
                     })
                 }
                 break;
@@ -112,7 +124,11 @@ class LoginCard extends Component {
                 <div className="card-body">
                     <h5 className="card-title">Login</h5>
                     <br />
-                    <small id="message" style={{ color: 'red' }}></small>
+                    {
+                        !this.state.signedIn
+                            ? <small id="message" style={{ color: 'red' }}></small>
+                            : ''
+                    }
                     <hr />
                     <div className="btn-group" role="group">
                         {
@@ -122,7 +138,7 @@ class LoginCard extends Component {
                         }
                     </div>
                     {
-                        this.state.showEmailFields
+                        this.state.showEmailFields && !this.state.signedIn
                             ?
                             <div>
                                 <div className="form-group">
@@ -133,7 +149,7 @@ class LoginCard extends Component {
                                 </div>
                                 <button type="button" className="btn btn-lg  btn-outline-danger"
                                     onClick={() => this.loginWithClient("Email")}>
-                                    Submit
+                                    Sign In / Register
                                 </button>
                             </div>
                             : ''

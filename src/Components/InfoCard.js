@@ -6,7 +6,8 @@ class InfoCard extends Component {
         super(props);
         this.state = {
             signedIn: false,
-            userInfo: null
+            userInfo: null,
+            defaultUserProfile: "https://cdn.dribbble.com/users/77628/screenshots/5272157/cover___design_sprints_final_600x800_2x.png"
         };
     }
 
@@ -37,7 +38,11 @@ class InfoCard extends Component {
                     this.state.signedIn && this.state.userInfo
                         ?
                         <div>
-                            <img className="card-img-top" id="profileImage" src={this.state.userInfo.photoURL} alt="User Profile Card" />
+                            <img 
+                            className="card-img-top" 
+                            id="profileImage" 
+                            src={this.state.userInfo.photoURL || this.state.defaultUserProfile} 
+                            alt={this.state.userInfo.displayName || this.state.defaultUserProfile} />
                             <div className="card-body">
                                 <h5 className="card-title">{this.state.userInfo.displayName}</h5>
                                 <p className="card-text">{this.state.userInfo.email}</p>
