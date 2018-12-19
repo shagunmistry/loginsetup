@@ -14,7 +14,6 @@ class InfoCard extends Component {
     componentDidMount() {
         firebaseApp.auth().onAuthStateChanged((user) => {
             if (user) {
-                console.log(user);
                 this.setState({
                     signedIn: true,
                     userInfo: user
